@@ -17,12 +17,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first to leverage Docker cache
-COPY composer.* ./
+# Create directory structure
+RUN mkdir -p var/cache var/log var/sessions public config src templates vendor
 
-# Create var directory and set permissions
-RUN mkdir -p var && \
-    chmod -R 777 var
+# Set permissions
+RUN chmod -R 777 var
+
+# Copy composer files first
+COPY composer.json composer.* ./
 
 # Install dependencies
 RUN composer install --prefer-dist --no-scripts --no-progress --no-interaction
@@ -30,6 +32,5 @@ RUN composer install --prefer-dist --no-scripts --no-progress --no-interaction
 # Copy the rest of the application
 COPY . .
 
-# Ensure var directory exists and has correct permissions
-RUN chmod -R 777 var && \
-    chown -R www-data:www-data .
+# Final permission setup
+RUN chown -R www-data:www-data .

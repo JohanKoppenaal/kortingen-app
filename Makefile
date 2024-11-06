@@ -2,6 +2,7 @@
 
 start: ## Start the application
 	docker compose up --build -d
+	docker compose exec php composer install
 	@echo "Application is starting..."
 	@echo "Website: http://localhost:8080"
 	@echo "Use 'make logs' to see the logs"

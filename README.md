@@ -24,6 +24,16 @@ chmod +x setup.sh
 # Voer het setup script uit
 ./setup.sh
 
+# Install Composer
+# MACOS
+brew install composer
+
+# Linux
+sudo apt-get update
+sudo apt-get install php-cli unzip
+curl -sS https://getcomposer.org/installer -o composer-setup.php
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
 # Start de applicatie
 make start
 ```
