@@ -23,17 +23,6 @@ touch assets/styles/.gitkeep
 touch assets/vue/components/.gitkeep
 touch assets/vue/store/.gitkeep
 
-#!/bin/bash
-
-# Maak benodigde directories
-mkdir -p var/cache var/log var/sessions \
-    config/packages \
-    public \
-    src/{Controller,Entity,Repository,Service} \
-    templates \
-    migrations \
-    assets/{styles,vue/{components,store}}
-
 # Maak een basis public/index.php
 cat > public/index.php << 'EOF'
 <?php
@@ -153,6 +142,12 @@ return [
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
 ];
 EOF
+
+# Install Symfony security bundle
+composer require symfony/security-bundle
+
+# Clear Symfony cache
+php bin/console cache:clear
 
 # Zet de juiste permissies
 chmod -R 777 var
