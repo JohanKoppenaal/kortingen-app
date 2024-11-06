@@ -174,14 +174,4 @@ SHOPWARE_CLIENT_SECRET=jouw_secret
 3. Commit je changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push naar de branch (`git push origin feature/AmazingFeature`)
 5. Open een Pull Request
-
-## Licentie
-
-Dit project is gelicenseerd onder de MIT License - zie het [LICENSE](LICENSE) bestand voor details.
-
-## Support
-
-Bij vragen of problemen:
-1. Check de [Issues](https://github.com/jouw-username/kortingen-app/issues) pagina
-2. Open een nieuwe issue als je probleem nog niet bestaat
 ```
