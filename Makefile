@@ -1,36 +1,30 @@
-.PHONY: start stop restart build logs shell test clean help
+.PHONY: up down build install dev prod clean
 
-start: ## Start the application
+up: ## Start the development environment
 	docker-compose up -d
-	@echo "Application is starting..."
-	@echo "Website: http://localhost:8080"
-	@echo "Use 'make logs' to see the logs"
 
-stop: ## Stop the application
+down: ## Stop the development environment
 	docker-compose down
 
-restart: stop start ## Restart the application
-
-build: ## Rebuild all containers
+build: ## Build all containers
 	docker-compose build --no-cache
+
+install: build ## First time installation
 	docker-compose up -d
-	docker-compose exec php composer install
+	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
+	docker-compose exec php bin/console assets:install
 	docker-compose exec node yarn install
 	docker-compose exec node yarn build
-	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
 
-logs: ## Show logs from containers
-	docker-compose logs -f
+dev: up ## Start development environment
+	@echo "Development environment running at http://localhost:8080"
 
-shell: ## Access PHP container shell
-	docker-compose exec php bash
+prod: ## Build for production
+	docker-compose -f docker-compose.prod.yml up -d
 
-test: ## Run tests
-	docker-compose exec php bin/phpunit
-
-clean: ## Remove all containers and volumes
+clean: down ## Clean up the environment
 	docker-compose down -v --remove-orphans
-	rm -rf var/cache/*
+	rm -rf vendor node_modules var/cache/*
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
