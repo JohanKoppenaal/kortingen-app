@@ -24,10 +24,10 @@ RUN mkdir -p var/cache var/log var/sessions public config src templates vendor
 RUN chmod -R 777 var
 
 # Copy composer files first
-COPY composer.json composer.* ./
+COPY composer.json ./
 
-# Install dependencies
-RUN composer install --prefer-dist --no-scripts --no-progress --no-interaction
+# Update dependencies and create a fresh lock file
+RUN composer update --no-scripts --no-interaction
 
 # Copy the rest of the application
 COPY . .
