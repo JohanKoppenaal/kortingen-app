@@ -1,4 +1,3 @@
-```markdown
 # Shopware 6 Kortingen Dashboard
 
 Een applicatie voor het beheren van kortingen in Shopware 6 webshops. Deze applicatie maakt het mogelijk om automatisch kortingen toe te passen op producten gebaseerd op verschillende criteria zoals merk, categorie, tag, eigenschappen en prijs.
@@ -12,12 +11,20 @@ Een applicatie voor het beheren van kortingen in Shopware 6 webshops. Deze appli
 
 ## Quickstart
 
+## Quickstart
+
 ```bash
 # Clone het project
 git clone https://github.com/jouw-username/kortingen-app.git
 
 # Ga naar de project directory
 cd kortingen-app
+
+# Maak het setup script uitvoerbaar
+chmod +x setup.sh
+
+# Voer het setup script uit
+./setup.sh
 
 # Start de applicatie
 make start

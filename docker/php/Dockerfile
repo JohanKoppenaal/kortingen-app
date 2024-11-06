@@ -20,11 +20,16 @@ WORKDIR /var/www/html
 # Copy composer files first to leverage Docker cache
 COPY composer.* ./
 
+# Create var directory and set permissions
+RUN mkdir -p var && \
+    chmod -R 777 var
+
 # Install dependencies
 RUN composer install --prefer-dist --no-scripts --no-progress --no-interaction
 
 # Copy the rest of the application
 COPY . .
 
-# Set permissions
-RUN chown -R www-data:www-data var
+# Ensure var directory exists and has correct permissions
+RUN chmod -R 777 var && \
+    chown -R www-data:www-data .
