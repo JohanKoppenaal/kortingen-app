@@ -11,8 +11,6 @@ Een applicatie voor het beheren van kortingen in Shopware 6 webshops. Deze appli
 
 ## Quickstart
 
-## Quickstart
-
 ```bash
 # Clone het project
 git clone https://github.com/jouw-username/kortingen-app.git
