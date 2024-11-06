@@ -2,15 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /var/www/html
 
-# Copy package files
-COPY package*.json ./
-COPY yarn*.lock ./
-
-# Install dependencies
+# Install dependencies first
+COPY package.json yarn.lock ./
 RUN yarn install
 
 # Copy the rest of the application
 COPY . .
 
-# Build assets
-RUN yarn build
+# Set mode to development
+ENV NODE_ENV=development
+
+CMD ["tail", "-f", "/dev/null"]

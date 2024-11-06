@@ -1,30 +1,41 @@
-.PHONY: up down build install dev prod clean
+# Detect the Docker Compose command (V1 or V2)
+DOCKER_COMPOSE := $(shell if command -v docker-compose >/dev/null 2>&1; then echo "docker-compose"; else echo "docker compose"; fi)
 
-up: ## Start the development environment
-	docker-compose up -d
+.PHONY: start stop restart build logs shell test clean help
 
-down: ## Stop the development environment
-	docker-compose down
+start: build ## Start the application
+	$(DOCKER_COMPOSE) up -d
+	@echo "Application is starting..."
+	@echo "Website: http://localhost:8080"
+	@echo "Use 'make logs' to see the logs"
 
-build: ## Build all containers
-	docker-compose build --no-cache
+stop: ## Stop the application
+	$(DOCKER_COMPOSE) down
 
-install: build ## First time installation
-	docker-compose up -d
-	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
-	docker-compose exec php bin/console assets:install
-	docker-compose exec node yarn install
-	docker-compose exec node yarn build
+restart: stop start ## Restart the application
 
-dev: up ## Start development environment
-	@echo "Development environment running at http://localhost:8080"
+build: ## Rebuild all containers
+	docker compose build --no-cache
+	docker compose up -d
+	docker compose exec php composer install
+	docker compose exec node yarn install
+	docker compose exec node yarn build
+	docker compose exec php bin/console doctrine:database:create --if-not-exists
+	docker compose exec php bin/console make:migration
+	docker compose exec php bin/console doctrine:migrations:migrate --no-interaction
 
-prod: ## Build for production
-	docker-compose -f docker-compose.prod.yml up -d
+logs: ## Show logs from containers
+	$(DOCKER_COMPOSE) logs -f
 
-clean: down ## Clean up the environment
-	docker-compose down -v --remove-orphans
-	rm -rf vendor node_modules var/cache/*
+shell: ## Access PHP container shell
+	$(DOCKER_COMPOSE) exec php bash
+
+test: ## Run tests
+	$(DOCKER_COMPOSE) exec php bin/phpunit
+
+clean: ## Remove all containers and volumes
+	$(DOCKER_COMPOSE) down -v --remove-orphans
+	rm -rf var/cache/*
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
