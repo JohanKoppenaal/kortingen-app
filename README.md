@@ -30,7 +30,7 @@ make start
 
 De applicatie is nu beschikbaar op:
 - Frontend: http://localhost:8080
-- Database: localhost:33060
+- Database: http://localhost:33060
     - MYSQL_USER: user
     - MYSQL_PASSWORD: password
     - MYSQL_DATABASE: kortingen_db
